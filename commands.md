@@ -50,6 +50,8 @@
 
     `user@JunOS# top show | compare `
 
+**Practice Questions**
+
 
 *  Real-time statistics of all active interfaces 
 
@@ -90,4 +92,98 @@
 
 * Static Routing Configuration parameter **no-readvertise** allows us to prevent the static route to be redistributed using a dynamic routing protocol, when using this static route to provide connectivity to mgmt network 
 
+* Real time syslog messages on the terminal 
 
+    `user@JunOS> monitor start message`
+
+* All traffic dropped and an ICMP notification sent back to the source 
+    ```
+    user@JunOS> show configuration interface ge-0/0/1.0
+    family inet {
+        filter{
+            input input-ff;
+        }
+        address 10.10.102.1/24;
+    } 
+    user@JunOS> show configuration firewall filter input-ff
+    term t1{
+        then{
+            reject;
+        }
+    } 
+    ```
+
+* Show the options we can use with syslog UI_DBASE_LOGOUT_EVENT
+
+    `user@JunOS> help syslog UI_DBASE_LOGOUT_EVENT`
+
+* virtual Router: Similar to a VPN routing and forwarding instance type,but used for non-VPN realted 
+applications like virtualization. 
+
+    - l2vpn: Used in Layer 2 VPN implementation 
+    - no-forwarding: Used to separate large networks into smaller administrative entities 
+    - vpls: Used for point-to-multipoint LAN implementations between a set or sites in a VPN 
+    - vrf: Used in Layer 3 VPN implementations 
+
+* Transport Layer => flow control & Segmentation 
+
+* Displays the available options and a brief description of usage guidelines 
+
+    `user@JunOS> help topic interface ? `
+    
+* Gigabit interface regex matching on FPC 2 will inherit the family inet configuration 
+
+    ```
+    [edit groups]
+    user@JunOS# show 
+    ge-int {
+        interfaces {
+            <ge-2/*>{
+                unit 0{
+                    family inet {
+
+                    }
+                }
+            }
+        }
+    }
+    ```
+
+* Input firewall filters to control incoming traffic on a specific interface,
+output firewall filter to control outgoing traffic on a specific interface 
+
+* Separation of the control plane and forwardinf plane of a JunOS device 
+    - graceful Routing Engine Switchover 
+    - deep packet inspection 
+    - in-service software upgrades 
+
+* Transit traffic is only processed by the forwarding plane 
+
+* Order of authenticaion, attempt to authenticate using the local database if RADIUS and TACACS+ fails 
+    
+    ```
+    [edit]
+    user@JunOS> show system authentication-order 
+    authentication-order [ radius tacplus];
+
+    ```
+
+* Apply the policy as an export policy within the OSPF configiration 
+
+    ```
+    [edit policy-options]
+    user@JunOS# show 
+    policy-statement BGP-to-OSPF{
+        term 10 {
+            from protocol bgp;
+            then accept;
+        }
+    }
+    ```
+
+* Login classes, permissions can be overridden for certain commands & define access privileges for a user 
+
+* Exception traffic processing, 
+    - By default a rate-limiter for exception traffic exists on the internal link between the control plane and the forwarding plane 
+    - when congestion occurs, only exception traffic is given preference 
+    
