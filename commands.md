@@ -61,6 +61,7 @@
     ```
 
 **Deactivating Configuration**
+
     ```
     user@JunOS# run show route 100/24
     user@JunOS# edit routing-options static 
@@ -77,6 +78,7 @@
     
     ```
 **Cutting and Pasting Configuration**
+
     ```
     user@JunOS# save terminal 
     user@JunOS# load merge terminal relative 
