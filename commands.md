@@ -50,6 +50,48 @@
 
     `user@JunOS# top show | compare `
 
+**Loading Configuration File**
+    ```
+    user@JunOS# run file list ---> equivalent of UNIX ls -l command 
+    user@JunOS# run file show <file_name> --> cat equivalent of UNIX 
+    user@JunOS# load merge <file_name>
+    user@JunOS# show | display set 
+    user@JunOS# show | display set relative 
+    user@JunOS# load override reset  
+    ```
+
+**Deactivating Configuration**
+    ```
+    user@JunOS# run show route 100/24
+    user@JunOS# edit routing-options static 
+    user@JunOS# deactivate route ip/prefix
+    user@JunOS# show 
+    user@JunOS# run show route protocol static 
+    *********Shutdown equivalent of Cisco******
+    user@JunOS# edit int xe-0/0/0
+    user@JunOS# set disable 
+    user@JunOS# run show interface terse <interface_name>
+
+    **Deactivating and disabling are totally different thing**
+    user@JunOS# clear system commit ? 
+    
+    ```
+**Cutting and Pasting Configuration**
+    ```
+    user@JunOS# save terminal 
+    user@JunOS# load merge terminal relative 
+    user@JunOS# show configuration | compare rollback <number> 
+        ==> Compare rollback with current active configuration 
+
+    user@JunOS> file compare <file-before-config> <file-after-config>
+
+    user@JunOS> request system zeroize 
+    user@JunOS# load factory-default 
+    user@JunOS# show system root-authentication
+    user@JunOS# show system services 
+    user@JunOS# set system host-name <hostname>
+    
+    ```
 **Practice Questions**
 
 
