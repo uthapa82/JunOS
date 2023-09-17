@@ -51,6 +51,7 @@
     `user@JunOS# top show | compare `
 
 **Loading Configuration File**
+
     ```
     user@JunOS# run file list ---> equivalent of UNIX ls -l command 
     user@JunOS# run file show <file_name> --> cat equivalent of UNIX 
