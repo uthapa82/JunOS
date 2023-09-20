@@ -95,6 +95,12 @@
     user@JunOS# set system host-name <hostname>
     
 ```
+
+* OSPF configuration 
+
+```
+    user@JunOS# set protocols ospf area <area eg. 0.0.0.0> interface <eg so-0/0/0> 
+```
 **Practice Questions**
 
 
@@ -231,4 +237,36 @@ output firewall filter to control outgoing traffic on a specific interface
 * Exception traffic processing, 
     - By default a rate-limiter for exception traffic exists on the internal link between the control plane and the forwarding plane 
     - when congestion occurs, only exception traffic is given preference 
-    
+
+* Asterisks in a traceroute indicate a response timeout 
+
+```
+    user@JunOS> traceroute 10.1.15.2
+    traceroute to 10.1.15.2 (10.1.15.2), 30 hops max, 40 byte packets 
+    1 10.1.36.1 (10.1.36.1) 0.651ms 7.882ms 0.568ms
+    2 10.1.23.1 (10.1.23.1) 0.6ms 0.8ms 0.6ms
+    3 * * *
+    4 * * *
+    5 * * *
+```
+
+* Protocol updates and system management is done by Routing Engine(RE) 
+
+* Only allow 10.10.10.0/24 route and reject others
+
+```
+    user@JunOS# show policy-options 
+    policy-statement block-routes {
+        term 1{
+            from {
+                route-filter 10.10.10.0/24 longer;
+            }
+            then reject;
+        }
+    }
+```
+
+* Junos Software upgrade requires a reboot of the device 
+
+* An Export policy determines the routes in the local routing table that are advertised to peers 
+and  an import policy is used to control routes that are accepted by the local routing table 
