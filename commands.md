@@ -93,7 +93,24 @@
     user@JunOS# show system root-authentication
     user@JunOS# show system services 
     user@JunOS# set system host-name <hostname>
+
+    user@JunOS# help aprops archieve 
+    user@JunOS# set system services set web-mangement http interface <name eg: fxp0.0>
+    user@JunOS# up <number eg 2>
+    user@JunOS# show | display set 
+    user@JunOS# commit synchronize --> if multiple RE are installed 
+    user@JunOS> show system commit 
+    user@JunOS# commit comment "Text " 
+    user@JunOS# commit prepare 
+    user@JunOS# commit activate 
     
+    user@JunOS# request system configuration rescue save 
+    user@JunOS# rollback rescue  
+    user@JunOS# save <filename>
+
+    user@JunOS# save <path/filename>
+    user@JunOS# save ftp://user:password@router/<path/filename>
+    user@JunOS# save scp://user@router/<path/filename>
 ```
 
 * OSPF configuration 
