@@ -150,6 +150,105 @@
 
 ```
 
+* Syslog/logging 
+
+```
+    user@JunOS# run show system syslog
+    user@JunOS# edit system syslog 
+    user@JunOS# set file <file_name> change-log info 
+        - change-log = facility 
+        - info = severity 
+
+    user@JunOS# set file messages any any 
+        - severity level for the default messages file to any 
+
+    configure the system to send logs to remote server running standard 
+    system logging utility
+    [edit system syslog] 
+    user@JunOS# set host <ip-address> authorization info 
+        - correct facility that logs access attempts on the system 
+
+    user@JunOS# run file list /var/log/ 
+        - lists log files from the system's configuration 
+    
+    user@JunOS# run show log <file name>
+
+```
+
+* NTP
+
+```
+    user@JunOS# set system ntp server <ip address>
+    
+    configure NTP boot server 
+    user@JunOS# set system ntp boot-server <ip address>
+    user@JunOS# show system ntp
+
+    manually force synchronization with the NTP server 
+    user@JunOS> set date ntp 
+
+    verify sync 
+    user@JunOS> show ntp associations 
+
+```
+
+* SNMP 
+
+```
+    user@JunOS# set snmp community <name> clients <ip address>
+
+    configure snmp trap group to send traps to the NMS server, whenever the interface
+    transitions to a down state
+    user@JunOS# set snmp trap-group <name> targets <ip address>
+    user@JunOS# set snmp trap-group <name> categories link 
+
+    testing SNMP configuration
+    user@JunOS# set interface <number> disable 
+    user@JunOS#  run show interface <number> terse 
+    
+    no shutdown 
+    user@JunOS# delete interface <number> disable 
+
+    checking the interface up down state change in snmp 
+    user@JunOS> show log messages | match <interface> | match snmp 
+    user@JunOS> show snmp statistics 
+
+    user@JunOS#  show snmp mib walk jnxOperatingDescr
+
+
+```
+* Operational Monitoring and Maintenance 
+
+```
+    - cehck the status of routing protocol process(rpd)
+    user@JunOS> show system processes extensive 
+    user@JunOS> show system processes extensive | match "pid | rpd"
+
+    view the protocol statistics 
+    user@JunOS> show system statistics 
+    user@JunOS> show system uptime 
+    user@JunOS> show system users 
+
+    force a logout for the user 
+    user@JunOS> request system logout user walter 
+    
+    user@JunOS> show chassis routing-engine 
+    user@JunOS> show chassis location 
+
+    set the system location 
+    user@JunOS# set system location bulding "DC Pod 2" floor <number>
+    user@JunOS> show chassis hardware 
+    user@JunOS> show interface terse 
+    user@JunOS> show interface <name> extensive
+    user@JunOS> clear interface statistics  <number>
+    user@JunOS> show interface <number> extensive | find "traffic" 
+
+```
+
+* What Trap category do we enable to receive traps for an over-temperature condition
+    => chassis category
+
+
 * OSPF configuration 
 
 ```
