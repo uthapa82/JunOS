@@ -78,7 +78,7 @@
     user@JunOS# clear system commit ? 
     
 ```
-**Cutting and Pasting Configuration**
+**Cutting and Pasting Configuration/General Configuration**
 
 ```
     user@JunOS# save terminal 
@@ -111,6 +111,43 @@
     user@JunOS# save <path/filename>
     user@JunOS# save ftp://user:password@router/<path/filename>
     user@JunOS# save scp://user@router/<path/filename>
+
+    user@JunOS# load factory-default  
+    user@JunOS# show syatem authentication-order 
+    user@JunOS# show radius-server 
+    user@JunOS# show tacplus-server 
+    user@JunOS# show login user lab 
+    user@JunOS# edit system archival 
+        - transfer-on-comit 
+
+    user@JunOS> restart routing 
+    - restarts the routing protocols process(rpd), 
+    which can be useful when troubleshooting routing problems
+```
+
+* User Authentication
+
+```
+    user@JunOS# set system radius-server <ip-address> secret <secret>
+    user@JunOS# set system authentication-order radius 
+    user@JunOS# 
+    - if an authentication method is unavailable because of network or server outage,
+    the software automatically consults the local password database 
+
+```
+
+* Archival configuration 
+
+```
+    user@JunOS# edit system archival configuration 
+    user@JunOS# set archieve-sites "ftp://ftp@172.25.11.254/archive" password ftp 
+    user@JunOS# set transfer-on-commit 
+    
+    user@JunOS# set system syslog file messages any any 
+    
+    user@JunOS> show log messages | match transfer 
+    - the transfer is logged in the /var/log/messages file 
+
 ```
 
 * OSPF configuration 
