@@ -423,3 +423,13 @@ output firewall filter to control outgoing traffic on a specific interface
 
 * An Export policy determines the routes in the local routing table that are advertised to peers 
 and  an import policy is used to control routes that are accepted by the local routing table 
+
+``` 
+    user@JunOS# edit interfaces    
+    [edit interfaces]
+    user@JunOS# edit ge-0/0/0 unit 0 family inet 
+    [edit interface ge-0/0/0 unit 0 family inet]
+    user@JunOS#  exit 
+
+```
+
