@@ -248,7 +248,119 @@
 * What Trap category do we enable to receive traps for an over-temperature condition
     => chassis category
 
+* Password recovery 
+    1. Reboot the system 
+    2. Press space
+    3. boot -s 
+    4. recovery 
+    5. Set root password 
+    6. commit 
 
+* Upgrading Junos 
+
+```
+    user@JunOS> request system storage cleanup or dry-run 
+    user@JunOS> request system zeroize 
+        - removes all configs factory default 
+    user@JunOS> request system zeroize media 
+        - to make removed information unrecoverable 
+
+    check the version 
+    user@JunOS> show version 
+
+```
+
+* Interfaces 
+    - gig -> ge 
+    - tenGig -> xe 
+    - et -> 40/100G
+    - es -> encryption interface 
+    - gr -> GRE 
+    Naming convetion FPC/Slot/port example: ge-0/0/2
+    - irb integrated routing and bridiging int
+
+* LAG 
+    1. Logical aggregrate ethernet interface (ae0)
+        - edit chassis( add aggregated devices)
+        - set aggregrated devices ethernet device count 
+    
+    2. Paraneters assicuated with the ae0 are defined 
+
+    3. Member links are associated with LAG 
+
+* Configuration Groups 
+    Features 
+    - apply a group of configuration statements to different sections of configuration 
+    - separate the common interface media parameters from the interface-specific addressing info 
+    - create smaller, more logically constructed configuration files 
+
+* Routing 
+    - End-to-end communication path 
+    - Forwarding information Base (FIB) and Routing Information Base (RIB)
+
+    Primary 
+    - inet.0 for ipv4 unicast 
+    - inet6.0 for ipv6 unicast 
+    - inet.1 multicast forwarding cache 
+    - inet.2 multicast(MBGP) routes to provide reverse path(RPF) checks 
+    - inet.3 used for MPLS path inform 
+    - inet.4 multicast source discovery protocol (MSDP)
+    - MPLS.0 MPLS next hop 
+
+    **Routing Preferences**
+    | Routing Protocol | Preference | 
+    | -----------------|------------|
+    | Direct  | 0 |
+    | Local   | 0 |
+    | static  | 5 |
+    | OSPF internal | 10 | 
+    | RIP | 100 |
+    | OSPF AS external | 150 |
+    | BGP (both internal and external) | 170 |
+
+
+
+```
+    user@JunOS> show route ip exact 
+    user@JunOS> show route 
+    user@JunOS> show route protocol ospf 
+    user@JunOS> show route forwarding table 
+    user@JunOS> show route instance 
+```
+
+* Elements of Routing table 
+
+    - Active, holddown, hidden
+        Active route 
+        pending state before system declares inactive 
+        cannot be used because of policy or invalid next-hop
+    
+    - Forwarding tabke 
+        stores only best route to particular destination 
+    
+    - dest => directly connected 
+    - intf => installed as a result of interface configurations
+    - perm => routes installed by kernel during initialization of routing 
+    - user => routes by routing protocol process or as a result of config 
+
+* Routing instance types 
+    - evpn : EVPN routing instance 
+    - evpn-vpws: EVPN VPWS routing instance 
+    - mpls :internet multicast internet multicast over MPLS routing instance 
+    - virtual router : used for non-VPN related application such as virtualization 
+    - no-forwarding: used to separate large networks into smaller administrative entities 
+    - forwarding : used to implement FBF for common Access layer application  
+    - vrf : used in L3 VPN implementation 
+
+```
+    user@JunOS> show route table <instance-name eg new-instance>.inet0
+
+    user@JunOS> show interface terse routing-instance <name of instance >
+
+    user@JunOS> ping <ip address> rapid count <number> routing-instance <new-instance>
+
+    user@JunOS> traceroute <ip address> routing-instance <new instance>
+```
 * OSPF configuration 
 
 ```
