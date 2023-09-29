@@ -326,6 +326,12 @@
     user@JunOS> show route protocol ospf 
     user@JunOS> show route forwarding table 
     user@JunOS> show route instance 
+    user@JunOS# set static route <ip address eg 192.168.2.2/32> qualified-next-hop <backup ip eg 172.20.77.2> preference 6
+
+    user@JunOS# delete static route <ip address  eg. 192.168.2.2/32>
+
+    user@JunOS# delete rib inet6.0 static 
+    
 ```
 
 * Elements of Routing table 
@@ -361,11 +367,50 @@
 
     user@JunOS> traceroute <ip address> routing-instance <new instance>
 ```
+
 * OSPF configuration 
 
 ```
     user@JunOS# set protocols ospf area <area eg. 0.0.0.0> interface <eg so-0/0/0> 
+    [edit protocols ospf]
+    user@JunOS# set area 0 interface ge-0/0/3.0 passive 
+    [edit protocols ospf]
+    user@JunOS# set area 0 interface lo0.0
 ```
+
+* Configuring interface for ipv6 
+    - enabling ipv6
+        - configures the interface's link local address
+        - activates ipv6 processing for that interface 
+
+```
+    user@JunOS# set family inet6 address <xxxx:xxxx::x/n>
+    
+    point-to-point: /127
+    loopback: /128
+    user@JunOS# set family inet6 ----> enables the ipv6 and adds link-local address 
+    user@JunOS# set family inet6 address <ipv6 address>/64 eui-64
+
+    user@JunOS# set rib inet6.0 static route fda9::2 next-hop fda1::2
+
+    can use link local addres but the route type have to be fully specified 
+    user@JunOS# set rib inet6.0 static route ::/0 qualified-next-hop fe80::1 interface ge-0/0/0  
+
+```
+
+* OSPF for ipv6 **RFC5340**
+    - Fundamental mechanics of OSPF unchanged 
+        | Fundamental|
+        |--------|
+        | Link-state Advertisement Flooding |
+        |Areas |
+        |Designated router elections |
+        |stub|
+        |Not-so-stubby(NSSA)|
+
+    - Configuration mainly requires us to change ospf3 for ospf 
+
+
 **Practice Questions**
 
 
