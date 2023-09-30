@@ -529,7 +529,238 @@
         - Prioritizing latency-sensitive traffic such as VoIP 
         - Controlling congestion to ensure SLA maintenance 
         - Allocating bandwidth for different classes of traffic 
+
+    
+    ![CoS Processing](images/cos-1.png)   
+    
+    - Fowarding Classes
+        - identify traffic that should receive common treatment 
+        - are used to assign traffic to output queues 
+    
+    - Packet Loss Priority (PLP)
+        - identifies the priority a system should give to dropping a packet 
+        - Is used to select the drop profile used in the random early detection (RED) process 
+    
+    - Scheduler: defines how a packet it treated in the output transmission queue 
+    - Buffer Size: Defines the period  for which a packet is stored during congestion 
+    - Scheduling Priority and Transmit Rate 
+        - Determine the order in which a packet is transmitted 
+    - Drop Profile 
+        - Define how agressively a device drops packets that are using a particular scheduler 
+
+
+* Junos OS Traffic Classification 
+    - Multifield classifier 
+    - Behavior aggregate(BA) 
+        - Consistent CoS traffic  throughout the entire network 
+        - Simplified task of creating and maintaining accurate multifield classifiers on each system 
+
+    `user@JunOS# edit firewall family inet `
+
+    `user@JunOS#  show filter <name eg. apply-cos-marking >`
+
+
+    - Rewrite Rule 
+        - modifies the appropriate CoS bits in an ooutgoing packet
+        - examine the forwarding class and loss priority of packet 
+        - set bits to a corresponding value sepcified in the rule 
+        - [edit class-of-service]
+
+    |Behavior Aggregate classifier| Multifield Classifier |
+    | --------------------- | -----------------------------|
+    | configured like regular firewall filters | configured by applying a rewrite rule to the outbound interface|
+    | configured under [edit class-of-service interfaces] | configured under [edit firewall family inet] |
+
+* Junos OS Traffic Queuing 
+    - Fowarding classes map to queues 
+    - 0: best effort 
+    - 1: expedited-forwarding 
+    - 2: assured-forwarding 
+    - 3: network-control 
+
+```
+    user@JunOS> show class-of-service forwarding-class 
+    user@JunOS# edit class-of-service 
+    user@JunOS# set forwarding-classes queue 0 general-traffic 
+    user@JunOS# set forwarding-classes queue 1 important-traffic 
+    user@JunOS# set forwardig-classes queue 2 critical-traffic 
+```
+
+* Junos OS Traffic Scheduling 
+    - Priority 
+    - Transmission Rate (95% to queue 0 best-effort)
+        - 5 % to network-control forwarding class queue 3
+    - Buffer Size 
+    - RED configuration 
+    
+    - Queue Priority 
+        - Strict-high 
+        - High
+        - Medium-high
+        - Medium-low 
+        - Low 
+
+    - Drop Profile 
+        - queue fullness and the drop probability 
+
+    **Function of Scheduler and scheduler map**
+        - Associate parameters with various queues 
+        - Define CoS parameters for queue servicing 
+
+    **Scheduling components that define the storage and dropping of packets**
+        - Buffer Size 
+        - RED configuration
+
+
+* CoS Use Case 
+
+```
+term from-professors {
+    from {
+        source-address {
+            192.168.25.64/26;
+        }
+    }
+    then {
+        forwarding-class professors;
+        accept;
+    }
+}
+term from-students {
+    from {
+        source-address {
+            192.168.25.128/25;
+        }
+    }
+    then {
+        policer student-policer; ## 'student-policer' is not defined
+        forwarding-class students;
+        accept;
+    }
+}
+term default {
+    then accept;
+}
+
+    user@JunOS> show interfaces queue ge-0/0/3
+    user@JunOS> show class-of-service interface ge-0/0/3 --> displays queue stat for the specified interface 
+```
+
+* Lab
+    - Configuring the best-effort or network-control forwarding classes or assigning them to their respective queues is not necessary because they are default CoS designations and assignments
+    
+    - RTP traffic uses udp and a port range of 16384-32767
+    - 
+
+* JTAC Support Case 
+    - 'user@JunOS> request support information '
+
+    - Priority  Critical(1), High(2), Medium(3), low(4)
+
+    - Customer Support Login and Chassis Serial Number are required to open support case 
+    - A valid maintenance contract is required to access the juniper Networks Support Services over the Web 
+    
+* Juniper Knowledge Base to research issue 
+* Problem Report is the description of hardware or software defect 
+* structre of PR: Number, title, release Note, Severity, **trigger, workaround**, status, resolved-in 
+* chmod 444 to ensure all users have read access 
+
+
+* Juniper Security Concepts 
+    - Threat Surfcace Expanding 
+    - Security Technology  Interaction 
+    - Attack Frequency and Cost 
+    - Security
+        - Availability 
+        - Scalability 
+        - Manageability 
+        - Performance 
+        - Budget 
+    - Security Management Challenges 
+        - Too many isolated security appliances 
+        - Many different threat scores 
+        - Mannual Coordination 
+
+    - Layered stack of specialized products 
+        - Intrusion Prevention
+         - Endpoint protection 
+         - Advanced Threat Prevention 
+         - Application Security 
+         - Data Loss Prevention 
         
+    - Juniper Connected Security Components 
+        - Operational Efficiency : centralized management 
+        - Security Efficacy : must support advanced security features 
+        - Business Agility : easily scale 
+
+        - Performance, efficacy, scalability, automation, & centralized control 
+        - **SRX Foundation Services**
+            1. Firewall 
+            2. NAT 
+            3. VPN
+            4. Routing 
+            5. Reporting 
+            6. Abakytics 
+            7. Automation 
+            8. Management 
+
+        ![SRX Security](images/srx.png)
+
+        - Juniper Secure Connect : SSL-VPN application 
+        - Juniper Identity Management Service(JIMS) windows based agent that collects and maintains a database of authenticaion information from Active Directory domains or syslog 
+        - Features of JIMS
+            - Centralized User Identity Data Collection : a scalable service that can take over user identity data collection 
+
+            - Data Collection from Syslog Sources : collect event data and user information data from an event source eg. DHCP  
+
+            - Domain PC probing : Acts as a supplement to event log reading 
+
+            - System-Level IP address, Event and Group Filtering: Specify IP address ranges 
+
+        ![NGFW Juniper](images/firewall.png)
+        
+        - AppTrack : Analyzes application data and classifies it based on risk level, user ID, zones, source, and destination addresses 
+
+        - ApppFW : Creates application control policies to allow or deny traffic based on application names 
+
+        - AppQoS : Meters and marks traffic based on the application security policies set by the administrator 
+
+        - SSL Proxy: Transparently performs SSL encryption between the client ant the server 
+
+        - IPS: Tightly integrates Juniper's application security features with the network infrastructure to provide threat mitigation and protection 
+
+        - Unified Threat Management Services(UTM)
+            - Consolidation of several security features into on device, protecting against multiple threat types  
+            
+        ![UTM](images/utm.png)
+
+        - Juniper Advanced Threat Prevention (JATP), SecIntel
+        - Benefits of Juniper Connected security 
+            1. Centralized Management and Visibility 
+            - Visibility of North-South Traffic 
+            - Ability to block East-West Traffic 
+
+            2. Comprehensive Security 
+            - Firewalls are right-sized for their application in the network 
+            - Security on both public and private cloud environments 
+
+            3. Protection from Advanced Malware 
+            - Detect known and unknown threats 
+            - Gathers and transforms the threat intelligence information into actionable items 
+
+            4. Multivendor Integration 
+            - Detect and enforce security across Juniper products and solutions 
+
+            5. Access and application Mobility 
+            - Consolidate threats from different sources to protect network access for all users 
+
+            **Juniper Connected Security building blocks**
+                - Management and Visibility 
+                - Detection 
+                - Enforcement 
+
+                
+
 
 **Practice Questions**
 
