@@ -410,6 +410,126 @@
 
     - Configuration mainly requires us to change ospf3 for ospf 
 
+* Routing Policy
+    - explicit routing poilicy 
+    - `user@JunOS# edit policy-options`
+    - exact, longer, orlonger, perfix-length-range /x -/y, upto
+    
+    1. Terminating actions 
+        - accept 
+        - reject 
+
+    2. Flow control
+        - next term 
+        - next policy 
+
+    3. Modifying Attributes 
+        - community(add, delete and set)
+        - preference
+        - as path-prepend
+        - next-hop 
+
+    **Accept**
+    - Causes the system to accept the packet and continue the input or output processing of the packet 
+
+    **Discard**
+    - Causes the system to discard the packet and send a message back to source address 
+
+    - Flow Control  
+        - next term 
+        - next filter action doesn't exist 
+    
+    - Action Modifiers 
+        - count, log and syslog 
+        - forwarding-class and loss-priority 
+        - policer 
+
+```
+    user@JunOS# edit policy-options 
+    user@JunOS# edit policy-statement <name1>
+    user@JunOS# set term <name2> from protocol static 
+    user@JunOS# set term <name2> from route-filter 0/0 exact 
+    user@JunOS# set term <name2> then accept 
+
+    user@JunOS# top edit protocols ospf 
+    user@JunOS# set export <name1>
+```
+
+* Firewall filter Use Cases 
+
+```
+    user@JunOS# commit confirmed 
+    -----> when configuring the firewall filters best to use so that we don't get locked out 
+    of the mgmt interface
+
+    user@JunOS# edit firewall 
+
+    user@JunOS> show firewall coutner filter <name-of-filter> outbound-accept 
+    user@JunOS> show firewall log 
+    user@JunOS> clear firewall filter <filter name >
+                           
+```
+    - [edit firewall family inet] => ensures that family inet filters are applied only to interfaces 
+    running ipv4
+
+* Policing 
+    - rate-limiting 
+    - enables us to limit the amount of traffic that passes into or out of an interface
+    - works with firewall filters to thwart DoS attack
+        - common actions include discard, specify the forwarding class and set loss-priority level 
+    - interface-based policers 
+        - L2VPN traffic, MPLS, IPV6 families 
+    - Policing employs the tocken bucket algorithm 
+        - enforces limit on average bandwidth
+        - enabling burst upto specified maximum value 
+    
+    - Can configure two rate limits for the traffic 
+        1. Bandwidth: the number of bits per seconf permitted on average 
+        2. Maximum burst size: the total number of bytes the system permits in bursts of data that exceed the given bandwidth limit 
+
+    - Maximum Burst size = Speed of the interface x Amount of time bursts 
+    Eg. to permit burst on Ethernet link for 5ms 
+        Burst Size = 100,000,000 bps  x (5/1000s) => 62,500bytes 
+    
+    - statements 
+        bandwith-limit
+        burst-size-limit
+
+    - can use k, m, g for one thousand, one million and one billion bytes or bits 
+
+* Unicast RPF (Reverse path-forwarding)
+    - automates antispoofing filters based on routing table (RIB)
+    - helps to validate packet receipt on the interfaces
+    - strict(default) accept if :pkt source match or next-hop match 
+    
+    - Two modes
+        - loose- accept of the pkt's src address matches a prefic in the routing table 
+                 if default route is present, packets are always match loose mode 
+    
+    - Network where assymetric routing excists should activate following 
+
+```
+    routing-options{
+        forwarding-table {
+            unicast-reverse-path feasible-paths;
+        }
+    }
+```     
+
+    - only enable on edge router 
+    - Fail filter run filter on the packet before discarding it 
+
+
+* CoS 
+    - mechanisms for categorizing traffic and meeting performance requirements within a network 
+    - serial transmission delays 
+    - Propagation delays 
+
+    - CoS meets a network's performance requirements by:
+        - Prioritizing latency-sensitive traffic such as VoIP 
+        - Controlling congestion to ensure SLA maintenance 
+        - Allocating bandwidth for different classes of traffic 
+        
 
 **Practice Questions**
 
