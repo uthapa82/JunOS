@@ -759,9 +759,38 @@ term default {
                 - Detection 
                 - Enforcement 
 
-                
+* IPv6 
+    - Device consider the neighbor as reachable in the process of Neighbor Discovery when
+        - the device receives recent conifrmation from the neighbor recevice 
+        - the received neighbor has processed IP traffic request 
 
+    - Router solicitation messages to discover the presence and properties of on-link routers
+    - EUI is a 64 bit HEX value used to identify an interface in stateless autoconfiguration 
 
+    - `user@JunOS> show bgp summary`
+
+    - `user@JunOS> show route table inet6.0 protocol static`
+
+* IPV6 Over IPV4 Tunnels 
+    - Approaches to Tunneling 
+        - ipv4 compatbile addressing 
+        - configured tunnels 
+        - 6to4
+        - 6over4
+    - tunnel interface gr- for GRE 
+
+```
+
+    user@JunOS> ping <ipv6> source ipv6 rapid count <count>
+    user@JunOS> show interfaces gr-0/0/0.0 detail | find "traffic statistics"
+
+```
+
+**VLAN**
+```
+    [edit interface xe-0/0/2]
+    user@JunOS# set unit 0 family ethernet-switching interface-mode {access | trunk } vlan members <vlan name>
+```
 **Practice Questions**
 
 
