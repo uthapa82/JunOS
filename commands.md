@@ -220,7 +220,7 @@
 * Operational Monitoring and Maintenance 
 
 ```
-    - cehck the status of routing protocol process(rpd)
+    - check the status of routing protocol process(rpd)
     user@JunOS> show system processes extensive 
     user@JunOS> show system processes extensive | match "pid | rpd"
 
@@ -276,7 +276,7 @@
     - et -> 40/100G
     - es -> encryption interface 
     - gr -> GRE 
-    Naming convetion FPC/Slot/port example: ge-0/0/2
+    - Naming convetion FPC/Slot/port example: ge-0/0/2
     - irb integrated routing and bridiging int
 
 * LAG 
@@ -284,7 +284,7 @@
         - edit chassis( add aggregated devices)
         - set aggregrated devices ethernet device count 
     
-    2. Paraneters assicuated with the ae0 are defined 
+    2. Parameters associated with the ae0 are defined 
 
     3. Member links are associated with LAG 
 
@@ -326,7 +326,8 @@
     user@JunOS> show route protocol ospf 
     user@JunOS> show route forwarding table 
     user@JunOS> show route instance 
-    user@JunOS# set static route <ip address eg 192.168.2.2/32> qualified-next-hop <backup ip eg 172.20.77.2> preference 6
+    user@JunOS# set static route <ip address eg 192.168.2.2/32> qualified-next-hop <backup ip eg 172.20.77.2> 
+    preference 6
 
     user@JunOS# delete static route <ip address  eg. 192.168.2.2/32>
 
@@ -337,12 +338,12 @@
 * Elements of Routing table 
 
     - Active, holddown, hidden
-        Active route 
-        pending state before system declares inactive 
-        cannot be used because of policy or invalid next-hop
+        - Active route 
+        - pending state before system declares inactive 
+        - cannot be used because of policy or invalid next-hop
     
-    - Forwarding tabke 
-        stores only best route to particular destination 
+    - Forwarding table 
+        - stores only best route to particular destination 
     
     - dest => directly connected 
     - intf => installed as a result of interface configurations
@@ -352,7 +353,7 @@
 * Routing instance types 
     - evpn : EVPN routing instance 
     - evpn-vpws: EVPN VPWS routing instance 
-    - mpls :internet multicast internet multicast over MPLS routing instance 
+    - mpls : internet multicast over MPLS routing instance 
     - virtual router : used for non-VPN related application such as virtualization 
     - no-forwarding: used to separate large networks into smaller administrative entities 
     - forwarding : used to implement FBF for common Access layer application  
@@ -479,12 +480,12 @@
         - common actions include discard, specify the forwarding class and set loss-priority level 
     - interface-based policers 
         - L2VPN traffic, MPLS, IPV6 families 
-    - Policing employs the tocken bucket algorithm 
+    - Policing employs the token bucket algorithm 
         - enforces limit on average bandwidth
         - enabling burst upto specified maximum value 
     
     - Can configure two rate limits for the traffic 
-        1. Bandwidth: the number of bits per seconf permitted on average 
+        1. Bandwidth: the number of bits per second permitted on average 
         2. Maximum burst size: the total number of bytes the system permits in bursts of data that exceed the given bandwidth limit 
 
     - Maximum Burst size = Speed of the interface x Amount of time bursts 
@@ -503,17 +504,19 @@
     - strict(default) accept if :pkt source match or next-hop match 
     
     - Two modes
-        - loose- accept of the pkt's src address matches a prefic in the routing table 
+        - loose- accept of the pkt's src address matches a prefix in the routing table 
                  if default route is present, packets are always match loose mode 
     
     - Network where assymetric routing excists should activate following 
 
 ```
+
     routing-options{
         forwarding-table {
             unicast-reverse-path feasible-paths;
         }
     }
+
 ```     
 
     - only enable on edge router 
@@ -530,8 +533,7 @@
         - Controlling congestion to ensure SLA maintenance 
         - Allocating bandwidth for different classes of traffic 
 
-    
-    ![CoS Processing](images/cos-1.png)   
+    ![CoS Processing](./images/cos-1.png)  
     
     - Fowarding Classes
         - identify traffic that should receive common treatment 
@@ -541,7 +543,7 @@
         - identifies the priority a system should give to dropping a packet 
         - Is used to select the drop profile used in the random early detection (RED) process 
     
-    - Scheduler: defines how a packet it treated in the output transmission queue 
+    - Scheduler: defines how a packet is treated in the output transmission queue 
     - Buffer Size: Defines the period  for which a packet is stored during congestion 
     - Scheduling Priority and Transmit Rate 
         - Determine the order in which a packet is transmitted 
@@ -561,9 +563,9 @@
 
 
     - Rewrite Rule 
-        - modifies the appropriate CoS bits in an ooutgoing packet
+        - modifies the appropriate CoS bits in an outgoing packet
         - examine the forwarding class and loss priority of packet 
-        - set bits to a corresponding value sepcified in the rule 
+        - set bits to a corresponding value specified in the rule 
         - [edit class-of-service]
 
     |Behavior Aggregate classifier| Multifield Classifier |
@@ -603,11 +605,11 @@
     - Drop Profile 
         - queue fullness and the drop probability 
 
-    **Function of Scheduler and scheduler map**
+    * **Function of Scheduler and scheduler map**
         - Associate parameters with various queues 
         - Define CoS parameters for queue servicing 
 
-    **Scheduling components that define the storage and dropping of packets**
+    * **Scheduling components that define the storage and dropping of packets**
         - Buffer Size 
         - RED configuration
 
@@ -650,7 +652,7 @@ term default {
     - Configuring the best-effort or network-control forwarding classes or assigning them to their respective queues is not necessary because they are default CoS designations and assignments
     
     - RTP traffic uses udp and a port range of 16384-32767
-    - 
+
 
 * JTAC Support Case 
     - 'user@JunOS> request support information '
@@ -666,8 +668,8 @@ term default {
 * chmod 444 to ensure all users have read access 
 
 
-* Juniper Security Concepts 
-    - Threat Surfcace Expanding 
+* **Juniper Security Concepts** 
+    - Threat Surface Expanding 
     - Security Technology  Interaction 
     - Attack Frequency and Cost 
     - Security
@@ -679,7 +681,7 @@ term default {
     - Security Management Challenges 
         - Too many isolated security appliances 
         - Many different threat scores 
-        - Mannual Coordination 
+        - Manual Coordination 
 
     - Layered stack of specialized products 
         - Intrusion Prevention
@@ -700,11 +702,11 @@ term default {
             3. VPN
             4. Routing 
             5. Reporting 
-            6. Abakytics 
+            6. Anakytics 
             7. Automation 
             8. Management 
 
-        ![SRX Security](images/srx.png)
+        ![SRX Security](./images%20/srx.png)
 
         - Juniper Secure Connect : SSL-VPN application 
         - Juniper Identity Management Service(JIMS) windows based agent that collects and maintains a database of authenticaion information from Active Directory domains or syslog 
@@ -717,7 +719,7 @@ term default {
 
             - System-Level IP address, Event and Group Filtering: Specify IP address ranges 
 
-        ![NGFW Juniper](images/firewall.png)
+        ![NGFW Juniper](./images%20/firewall.png)
         
         - AppTrack : Analyzes application data and classifies it based on risk level, user ID, zones, source, and destination addresses 
 
@@ -725,14 +727,14 @@ term default {
 
         - AppQoS : Meters and marks traffic based on the application security policies set by the administrator 
 
-        - SSL Proxy: Transparently performs SSL encryption between the client ant the server 
+        - SSL Proxy: Transparently performs SSL encryption between the client and the server 
 
         - IPS: Tightly integrates Juniper's application security features with the network infrastructure to provide threat mitigation and protection 
 
         - Unified Threat Management Services(UTM)
-            - Consolidation of several security features into on device, protecting against multiple threat types  
+            - Consolidation of several security features into one device, protecting against multiple threat types  
             
-        ![UTM](images/utm.png)
+        ![UTM](./images/utm.png)
 
         - Juniper Advanced Threat Prevention (JATP), SecIntel
         - Benefits of Juniper Connected security 
@@ -740,19 +742,24 @@ term default {
             - Visibility of North-South Traffic 
             - Ability to block East-West Traffic 
 
+
             2. Comprehensive Security 
             - Firewalls are right-sized for their application in the network 
             - Security on both public and private cloud environments 
+
 
             3. Protection from Advanced Malware 
             - Detect known and unknown threats 
             - Gathers and transforms the threat intelligence information into actionable items 
 
+
             4. Multivendor Integration 
             - Detect and enforce security across Juniper products and solutions 
 
+
             5. Access and application Mobility 
             - Consolidate threats from different sources to protect network access for all users 
+
 
             **Juniper Connected Security building blocks**
                 - Management and Visibility 
@@ -781,7 +788,7 @@ term default {
 
 ```
 
-    user@JunOS> ping <ipv6> source ipv6 rapid count <count>
+    user@JunOS> ping <ipv6> source <ipv6> rapid count <count>
     user@JunOS> show interfaces gr-0/0/0.0 detail | find "traffic statistics"
 
 ```
@@ -810,7 +817,7 @@ term default {
 
 ```
 
-    user@JunOS>  shwo ospf neighbor 
+    user@JunOS>  show ospf neighbor 
     Address         Interface       State   ID              Pri     Dead
     172.25.1.9      ge-0/0/1.0      Full    192.168.100.3   128     38
     172.25.1.2      ge-0/0/2.0      Full    192.168.100.2   128     35
@@ -970,3 +977,60 @@ and  an import policy is used to control routes that are accepted by the local r
 
 ```
 
+* Examples of transit traffic 
+    - SFTP traffic that enters and exits the same interface on the local routers 
+    - SCP traffic that enters one interface and exists another interface on the local router 
+
+* Benefits realized by the disaggregated Junos OS 
+    - the platform drivers and FE are removed from the control plane to increase performance 
+    - the architecture facilitates programmability through provisioning the control plane, the data path and the platform API
+
+* A packet enters a Junos device. No matching destination entry exists in Forwarding table 
+    - the PFE responds to the source with destination unreachable notification message 
+
+* Each process operates in its own shared memory space 
+
+* Control between Control Plane and Forwarding Plane 
+    - Control traffic is preferred over exception traffic during congestion 
+    - A rate limiter is configured by default 
+
+* Reset the candidate configuration to active configuration rollback and rollback 0
+
+* Max number of configurations recoverable using rollback command ==> 50 
+
+* the purpose of load merge command 
+    - to combine the current configuration with the configuration you load 
+
+* Minimum system-defined user class required to issue clear commands 
+    - operator 
+
+* Ip address to use for packets sent to hosts on the same subnet
+    - use  preferred 
+    
+    ![preferred](./images/preferred.png)
+
+
+* traceroute on Junos devices
+    - receives ICMP time-exceeded packets 
+    - transmits UDP packets 
+
+* Upgrading Junos OS but there is not enough space to complete the upgrade 
+    - request system software add command no-copy 
+    
+    ![no-copy-command](./images/no-copy.png)
+
+
+* Dynamic routing allows a device to automatically reroute traffic around a failure and participating devices dynamically 
+learn routing information from each other 
+
+* The purpose of discard action of a firewall filter => system silently drops the packet
+
+* Ipv4 behavior for BGP 
+    - Import all BGP routes into the inet.0 routing table 
+    - Export active BGP routes to configured BGP peers 
+    
+    ![BGP-default-import](./images/bgp.png)
+
+* Next Hop and the interface from routing table 
+    
+    ![routing-table](./images/next-hop.png)
