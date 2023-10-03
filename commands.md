@@ -706,7 +706,7 @@ term default {
             7. Automation 
             8. Management 
 
-        ![SRX Security](./images%20/srx.png)
+        ![SRX Security](./images/srx.png)
 
         - Juniper Secure Connect : SSL-VPN application 
         - Juniper Identity Management Service(JIMS) windows based agent that collects and maintains a database of authenticaion information from Active Directory domains or syslog 
@@ -719,7 +719,7 @@ term default {
 
             - System-Level IP address, Event and Group Filtering: Specify IP address ranges 
 
-        ![NGFW Juniper](./images%20/firewall.png)
+        ![NGFW Juniper](./images/firewall.png)
         
         - AppTrack : Analyzes application data and classifies it based on risk level, user ID, zones, source, and destination addresses 
 
