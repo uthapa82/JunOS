@@ -173,6 +173,10 @@
     
     user@JunOS# run show log <file name>
 
+    user@JunOS> show log FILENAME | last NUM 
+    - show the most recent entries 
+    
+
 ```
 
 * NTP
@@ -355,7 +359,11 @@
     - evpn-vpws: EVPN VPWS routing instance 
     - mpls : internet multicast over MPLS routing instance 
     - virtual router : used for non-VPN related application such as virtualization 
+        - creates a new forwarding table 
+
     - no-forwarding: used to separate large networks into smaller administrative entities 
+        - shares the global forwarding table 
+
     - forwarding : used to implement FBF for common Access layer application  
     - vrf : used in L3 VPN implementation 
 
@@ -465,7 +473,7 @@
 
     user@JunOS# edit firewall 
 
-    user@JunOS> show firewall coutner filter <name-of-filter> outbound-accept 
+    user@JunOS> show firewall counter filter <name-of-filter> outbound-accept 
     user@JunOS> show firewall log 
     user@JunOS> clear firewall filter <filter name >
                            
@@ -1131,3 +1139,31 @@ policy-statement static-into-OSPF {
 * Default Routing Import/Export Policy 
 
 ![Default-policy](./images/default-policy.png)
+
+* Realtime Performance Monitoring (RPM)
+    - measure performance between two endpoints using probes 
+    - probes can use HTTP, ICMP, TCP and UDP 
+    - one or more probes are grouped into a 'TEST'
+
+```
+[edit services rpm]
+jcluser@vMX1# show 
+probe Ping-GW {
+    test ICMP {
+        probe-type icmp-ping;
+        target address 100.123.0.1;
+        probe-count 10;
+        probe-interval 3;
+    }
+}
+``` 
+
+* ping force and egress interface 
+
+    `ping <IP address> bypass-routing`
+    
+* Monitor a Path 
+
+    `traceroute monitor <ip address`
+
+
