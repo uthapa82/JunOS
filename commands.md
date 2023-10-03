@@ -1034,3 +1034,100 @@ learn routing information from each other
 * Next Hop and the interface from routing table 
     
     ![routing-table](./images/next-hop.png)
+
+* Discard - Silently drops 
+* Reject - Drops the packet but ICMP error message is sent 
+* Transit traffic : - goes in from ingress interface and out from egress interface 
+* Exception traffic :- Forwarding table redirects to local RE Protocol update, ICMP( Ping, traceroute, Mgmt traffic )
+
+* CHASSISD : starts up PFE's, interface and other hardware as well as copied run in the RE and each PFE 
+
+* DCD : device control daemon, manages interfaces (encapsulation, timers, VLANs, IP's)
+* MGD : management daemon, provides device management (ssh, telnet, web etc), handles CLI commands and configurations 
+* RPD : routing protocol daemon, manages all routing protocols (BGP, OSPF, IS-IS, RIP etc), works out metrics, finds best paths etc, multithreaded process 
+* SNMPD : SNMP daemon , responds to SNMP polling and sends SNMP traps 
+
+* `show system processes [brief | extensive]`
+
+* `show firewall log`
+
+
+```
+[edit firewall family inet filter BLOCK_vMX4]
+term Block-ICMP {
+    from {
+        source-address {
+            100.123.1.3/32;
+        }
+        protocol icmp;
+    }
+    then {
+        log;
+        reject;
+    }
+}
+term Default-Term {
+    then accept;
+}
+
+```
+
+* Qualified next-hop (JunOS) = Floating static Route (IOS)
+
+* `set routing-options router-id <router-id eg.1.1.1.1>`
+
+* If we want to advertise our static routes with OSPF what type of pplicy will we use 
+    - basically we're trying to redistribute static into ospf so we need to configure a policy on a router where we
+    export static route into OSPF database 
+
+```
+    set protocols ospf export static-into-ospf 
+    set protocols ospf area 0.0.0.0 interface em1.0
+    set policy-options policy-statement static-into-ospf term static from protocol static 
+    set policy-options policy-statement static-into-ospf term static then accept 
+    
+[edit policy-options]
+jcluser@vMX1# show 
+policy-statement static-into-OSPF {
+    term Redistribute-static {
+        from {
+            protocol static;
+            route-filter 0.0.0.0/0 exact;
+        }
+        then accept;
+    }
+}
+[edit protocols ospf]
+jcluser@vMX1# set export static-into-OSPF
+
+jcluser@vMX1> show ospf database external extensive 
+
+[edit policy-options]
+jcluser@vMX1# show 
+policy-statement static-into-OSPF {
+    term Redistribute-static {
+        from {
+            protocol static;
+            route-filter 0.0.0.0/0 exact;
+        }
+        then accept;
+    }
+    term Redistribute-static-E1 {
+        from {
+            protocol static;
+            route-filter 0.0.0.0/0 exact;
+        }
+        then {
+            external {
+                type 1;
+            }
+            accept;
+        }
+    }
+}
+
+``` 
+
+* Default Routing Import/Export Policy 
+
+![Default-policy](./images/default-policy.png)
